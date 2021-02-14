@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+    int min = 0;
+    int max = nums.size()-1;
+    int mid;
+    while (min <= max) { //此处必须加上=，因为奇数元素时，用=才能有效遍历
+        mid = (min+max)/2;
+        if (target == nums[mid])
+            return mid;
+        else if (target > nums[mid])
+            min = mid + 1;
+        else
+            max = mid - 1;
+    }
+    return max+1;
+    }
+};
