@@ -1,0 +1,22 @@
+/*
+ * 整体采用二分法实现，对于有序数组应当想到使用二分
+ * 本题采用左闭右闭方式，max和min与mid相差为1。如果有一端为开口，则取mid即可
+*/
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+    int min = 0;
+    int max = nums.size()-1;
+    int mid;
+    while (min <= max) { //此处必须加上=，因为奇数元素时，用=才能有效遍历。
+        mid = (min+max)/2;
+        if (target == nums[mid])
+            return mid;
+        else if (target > nums[mid])
+            min = mid + 1;
+        else
+            max = mid - 1;
+    }
+    return max+1; //此处使用max+1是无论如何都会落在max右侧
+    }
+};
