@@ -1,0 +1,33 @@
+/*
+ * 算法思想：对于螺旋矩阵问题，有固定的套路：以圈为单位，按照左闭右开的原则。依次填充上、右、下、左。再下一圈。
+ * 对于中心区域再次进行处理。如果是奇数边，则中心区域额外赋值
+*/
+class Solution {
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        vector<vector<int>> ending(n, vector<int>(n, 0)); 
+        int startx = 0, starty = 0;
+        int loop = n / 2;
+        int mid = n / 2;
+        int offset = 1;
+        int count = 1;
+        while (loop --) {
+            int i = startx;
+            int j = starty;
+            for (; j<starty+n-offset; j++) // 上 
+                ending[i][j] = count++; 
+            for (; i<startx+n-offset; i++) // 右
+                ending[i][j] = count++;
+            for (; j>starty; j--)          // 下
+                ending[i][j] = count++;
+            for (; i>startx; i--)          // 左
+                ending[i][j] = count++;
+            startx++;  // 起点更改
+            starty++;
+            offset += 2;   // 每次减少最左边，最右边两个
+        }
+        if (n % 2) // 如果n%2==1，即奇数
+            ending[mid][mid] = n*n;
+        return ending;
+    }
+};
