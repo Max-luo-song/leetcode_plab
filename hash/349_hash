@@ -1,0 +1,71 @@
+/*
+ * 寻找数组交集，本题采用三种方法完成：
+ * 方法一：双指针法，将数组进行排序后。两个指针对应两个数组，依次向后移动，相同的进行标记
+ * 方法二：普通哈希法，建立10001哈希表。统计出现次数。对于都出现的输出结果
+ * 方法三：改进哈希法，由于hash表范围不确定。使用unordered_set完成，将num1初始化set，对num2中元素使用find查找，end比较
+*/
+/*
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        if (nums1.size() == 0 || nums2.size() == 0)
+            return vector<int>{};
+        sort(nums1.begin(),nums1.end());
+        sort(nums2.begin(),nums2.end());
+        vector<int> ending;
+        int index1 = 0;
+        int index2 = 0;
+        int pre = -1;
+        while (index1<nums1.size() && index2<nums2.size())
+        {
+            if (nums1[index1] < nums2[index2])
+                index1++;
+            else if (nums1[index1] > nums2[index2])
+                index2++;
+            else if (nums1[index1] == nums2[index2])
+            {
+                if (nums1[index1] != pre)
+                {
+                    ending.push_back(nums1[index1]);
+                    pre = nums1[index1];
+                }
+                index1++;
+                index2++;
+            }
+        }
+        return ending;
+    }
+};*/
+
+/*class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        vector<int> a(10001,0);
+        vector<int> b(10001,0);
+        for (int i=0; i<nums1.size(); i++)
+            a[nums1[i]]++;
+        for (int j=0; j<nums2.size(); j++)
+            b[nums2[j]]++;
+        vector<int> ending;
+        for (int i=0; i<10001; i++) {
+            if (a[i] != 0 && b[i] != 0) { // 判断条件不是相等，而是不等于0，代表全部出现过
+                ending.push_back(i);
+            }
+        }
+        return ending;
+    }
+};*/
+
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        unordered_set<int> result; 
+        unordered_set<int> nums(nums1.begin(), nums1.end());
+        for (int i=0; i<nums2.size(); i++) {
+            if (nums.find(nums2[i]) != nums.end()) {   // 是map中的查找方式，调用find函数和end作比较
+                result.insert(nums2[i]);               // unordered_set的插入方式是insert
+            }
+        }
+        return vector<int>(result.begin(), result.end()); // 返回值类型要求是vector，再进行一下初始化
+    }
+};
