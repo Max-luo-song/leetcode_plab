@@ -1,0 +1,19 @@
+
+/*
+ * 算法思想：使用哈希进行映射，先统计magazine里的字符，再依次判断ransomNote是否存在。注意每次都要减少，题中存在可以重复的情况
+*/
+class Solution {
+public:
+    bool canConstruct(string ransomNote, string magazine) {
+        vector <int> mage(26,0);
+        for (int i=0; i<magazine.length(); i++)
+            mage[magazine[i]-'a']++;
+        for (int i=0; i<ransomNote.length(); i++) {
+            if (mage[ransomNote[i]-'a'] == 0)
+                return false;
+            else
+                mage[ransomNote[i]-'a']--;
+        }
+        return true;
+    }
+};
