@@ -1,0 +1,34 @@
+/*
+ * 算法思想1：先将数据进行排序，遍历数组统计val个数以及第一次出现val的位置。在从第一次出现处，依次向前进行覆盖。时间复杂度o(logn)
+ * 算法思想2：采用双指针思想，快指针不断增加，当快指针对应值不等于目标值时，慢指针自增。最后慢指针的数值即为个数.时间复杂度o(n)
+*/
+/*class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        sort(nums.begin(),nums.end());
+        int num = 0;
+        int j;
+        for (int i=0; i<nums.size(); i++) {
+            if (nums[i] == val) {
+                num++;
+                j = i;
+            }
+        }
+        for (int k=j-num+1; k<nums.size()-num; k++) {
+            nums[k] = nums[k+num];
+        }
+        return nums.size()-num;
+    }
+};*/
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        int slowindex = 0;
+        for (int fastindex=0; fastindex<nums.size(); fastindex++) {
+            if (val != nums[fastindex]) {
+                nums[slowindex++] = nums[fastindex];
+            }
+        }
+        return slowindex;
+    }
+};
