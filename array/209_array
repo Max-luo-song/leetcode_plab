@@ -1,0 +1,26 @@
+/*
+ * 算法思想1：双重遍历，从每个元素开始，寻找从该元素起，满足大于条件的最小个数。通过和最小值比对，进行更新。时间复杂度为o(n^2) 
+ * 算法思想2：双指针（滑动窗口算法），设置左边界，右边界。当窗口内总和小于target时，右窗口滑动增加值。大于target时增加左窗口，  
+ *  减少窗口个数。过程中需要记录最小值，时刻进行更新。o(n)
+*/
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        int result = INT_MAX;
+        int i = 0; // 起始位置
+        int sum = 0;
+        for (int j=0; j<nums.size(); j++) {
+            sum += nums[j];
+            while (sum >= target) {  // 移动左边界
+                int minlength = j-i+1;
+                if (minlength < result)
+                    result = minlength;
+                sum -= nums[i++];
+            }
+        }
+        if (result == INT_MAX) //特殊情况，没有更新时返回0
+            return 0;
+        else
+            return result;
+    }
+};
