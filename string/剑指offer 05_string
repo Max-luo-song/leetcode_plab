@@ -1,0 +1,29 @@
+/*
+ * 算法思想：本题是一道string覆盖的问题，一般采用额外开辟空间再对应赋值的方法。其实可以原地改变，先进行数组扩容。
+ *          再从后向前（从前向后对每一位都要提前空为比较麻烦）依次向前移动。对于字符串向后移动的问题，统一从后往前
+            对于string来说，length和size没有任何区别。
+*/
+class Solution {
+public:
+    string replaceSpace(string s) {
+        int count = 0;
+        int old_length = s.size();
+        for (int i=0; i<s.size(); i++)
+            if (s[i] == ' ')
+                count++;
+        s.resize(s.size()+count*2); // 使用resize()进行重新分配空间
+        int new_length = s.size();
+        for (int i=old_length-1,j=new_length-1; i<j; i--,j--) {
+            if (s[i] != ' ') {
+                s[j] = s[i];
+            }
+            else {
+                s[j] = '0';
+                s[j-1] = '2';
+                s[j-2] = '%';
+                j -= 2;
+            }
+        }
+        return s;
+    }
+};
