@@ -1,0 +1,19 @@
+/*
+ *   算法思想：使用哈希表的思想，将字母对应于26字母的下标。进行两方比较即可。本程序声明了a,b两个。其实可以声明一个，对于另外一
+ *            个采取减法。比较是否全部为0即可。
+*/
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        vector<int> a(26,0);
+        vector<int> b(26,0);
+        for (int i=0; s[i] != '\0'; i++)
+            a[s[i]-'a']++;
+        for (int j=0; t[j] != '\0'; j++)
+            b[t[j]-'a']++;
+        for (int i=0; i<26; i++)
+            if (a[i] != b[i])
+                return false;
+        return true;
+    }
+};
