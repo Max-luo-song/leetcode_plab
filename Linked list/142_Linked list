@@ -1,0 +1,32 @@
+/*
+ *  算法思想：对于环形链表问题，可以寻找其存在的数学关系，使用双指针。当指针相遇时即发生某些判定条件
+*/
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        ListNode *slow = head;
+        ListNode *fast = head;
+        while (fast != NULL && fast->next != NULL) {
+            slow = slow->next; // 慢指针一次移动一个格
+            fast = fast->next->next; // 快指针一次移动两个格
+            if (slow == fast) {  // 如果相遇说明有环
+                ListNode *index1 = head;
+                ListNode *index2 = slow;
+                while (index1 != index2) { // 有环的情况下，一个从相遇点出发，一个从头出发，最终再次相遇的地方就是入口
+                    index1 = index1->next;
+                    index2 = index2->next;
+                }
+                return index2;
+            }
+        }
+        return NULL;
+    }
+};
