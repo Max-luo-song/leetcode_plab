@@ -1,0 +1,32 @@
+/*
+ * 算法思想：双指针法实现反转，步骤如下：
+ *          1.保存当前指针的下一节点
+ *          2.进行翻转
+ *          3.进行更新，先更新pre，再更新cur
+*/
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode *cur = head;
+        ListNode *pre = NULL;
+        ListNode *tmp;
+        while (cur)
+        {
+            tmp = cur->next;
+            cur->next = pre;
+            pre = cur;
+            cur = tmp;
+        }
+        return pre;
+    }
+};
