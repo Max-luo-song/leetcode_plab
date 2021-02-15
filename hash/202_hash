@@ -1,0 +1,34 @@
+/*
+ * 算法思想：本题的欢乐数，看上去不知道截至在哪一步。其实存在两个截至条件：
+            1.结果为1，输出true
+            2.结果之前出现过，说明进入死循环。输出flase
+            使用unordered_set存储出现过的值，每次进行检索。对于没出现的记得插入进去
+*/
+class Solution {
+public:
+    bool isHappy(int n) {
+        unordered_set<int> num;
+        while (1) {
+            int data = Calculate(n);
+            if (data == 1)
+                return true;
+            else {
+                if (num.find(data) == num.end()) {
+                    num.insert(data);  // 记得进行数值插入
+                    n = data;
+                }
+                else
+                    return false;
+            }
+        }
+    }
+    int Calculate(int input)
+    {
+        int sum = 0;
+        while (input != 0) {
+            sum += (input%10)*(input%10);
+            input /= 10;
+        }
+        return sum;
+    }
+};
