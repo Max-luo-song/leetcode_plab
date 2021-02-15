@@ -1,0 +1,94 @@
+/*
+ * 注意链表元素的定义，一个虚拟头节点，一个链表长度。
+ * 本题index是从0开始，
+*/
+class MyLinkedList {
+public:
+    struct LinkedNode {
+        int val;
+        LinkedNode* next;
+        LinkedNode(int val):val(val),next(NULL) {};
+    };
+    /** Initialize your data structure here. */
+    MyLinkedList() {
+        vir_head = new LinkedNode(0);
+        size = 0;
+    }
+    
+    /** Get the value of the index-th node in the linked list. If the index is invalid, return -1. */
+    int get(int index) {
+        if (index > size-1 || index < 0)
+            return -1;
+        LinkedNode* p = vir_head->next;
+        for (int i=0; i<index; i++)
+            p = p->next;
+        return p->val;
+    }
+    
+    /** Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list. */
+    void addAtHead(int val) {
+        LinkedNode* new_head = new LinkedNode(val);
+        new_head->next = vir_head->next;
+        vir_head->next = new_head;
+        size++;
+    }
+    
+    /** Append a node of value val to the last element of the linked list. */
+    void addAtTail(int val) {
+        LinkedNode* p = vir_head;
+        while (p->next != NULL)
+            p = p->next;
+        LinkedNode* new_tail  =new LinkedNode(val);
+        p->next = new_tail;
+        size++;
+    }
+    
+    /** Add a node of value val before the index-th node in the linked list. If index equals to the length of linked list, the node will be appended to the end of linked list. If index is greater than the length, the node will not be inserted. */
+    void addAtIndex(int index, int val) {
+        if (index > size)
+            return;
+        if (index <= 0) {
+            addAtHead(val);
+            return;
+        }
+        int i;
+        LinkedNode* p = vir_head->next;
+        LinkedNode* new_node = new LinkedNode(val);
+        for (i=0; i<index-1; i++) {
+            p = p->next;
+        }
+        new_node->next = p->next;
+        p->next = new_node;
+        size++;
+    }
+    
+    /** Delete the index-th node in the linked list, if the index is valid. */
+    void deleteAtIndex(int index) {
+        if (index >= size || index < 0)
+            return;
+        LinkedNode* p = vir_head;
+        // index可能为0, 对于删除头节点，前节点保持在虚拟头节点。对于删除节点，开始节点一定保持在虚拟头节点 
+        int i;
+        for (i=0; i<index; i++) {
+            p = p->next;
+        }
+        LinkedNode* tmp = p->next;
+        p->next = p->next->next; // 对于两个next的，要保证p->next不等于NULL
+        delete tmp;
+        size--;
+    }
+// private要在后面声明
+private:
+    int size;
+    LinkedNode *vir_head;
+};
+
+/**
+ * Your MyLinkedList object will be instantiated and called as such:
+ * MyLinkedList* obj = new MyLinkedList();
+ * int param_1 = obj->get(index);
+ * obj->addAtHead(val);
+ * obj->addAtTail(val);
+ * obj->addAtIndex(index,val);
+ * obj->deleteAtIndex(index);
+ */
