@@ -1,0 +1,38 @@
+/*
+ *  算法思想：本题使用双指针法实现4数求和，在3数的基础上完成。首先进行排序。保持一个left,一个right。剩下的在3数上再加一重循环。 
+ *           本题要求不重复。所以在每一层循环时要进行去重。去重的方式都是索引较初始值大，且使用-1（+1对于尾部不确定）
+ *           对于5数相加，即可使用三重for循环（三个去重）+2指针完成。依次类推
+*/
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> ending;
+        for (int i=0; i<nums.size(); i++) {
+            if (i>0 && nums[i] == nums[i-1])   // 第一层去重
+                continue;
+            for (int j=i+1; j<nums.size(); j++) {
+                if (j>i+1 && nums[j] == nums[j-1]) //第二层去重
+                    continue;
+                int left = j+1;
+                int right = nums.size()-1;
+                while (left < right) {
+                    if (nums[i]+nums[j]+nums[left]+nums[right] == target) {
+                        ending.push_back({nums[i],nums[j],nums[left],nums[right]});
+                        while (left < right && nums[right] == nums[right-1])
+                            right--;
+                        while (left < right && nums[left] == nums[left+1])
+                            left++;
+                        right--;
+                        left++;
+                    }
+                    else if (nums[i]+nums[j]+nums[left]+nums[right] > target)
+                        right--;
+                    else
+                        left++;
+                }
+            }
+        }
+        return ending;
+    }
+};
