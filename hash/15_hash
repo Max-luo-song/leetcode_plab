@@ -1,0 +1,38 @@
+/*
+ *   算法思想：本题是三个数相加，可以采用类似于四个数相加结合map求解。但本题要求不能有重复，所以对于去重操作需要特殊要求。
+ *             使用双指针思想，在排序的情况下。一次for遍历，剩下的结合left,right指针。和大right左移，和小left右移。
+ *             也要注意其中的去重操作。
+*/
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int left, right;
+        vector<vector<int>> ending;
+        for (int i=0; i<nums.size(); i++) {        
+            if (nums[i] > 0)  // 最开始把这个判断条件放在外面，但其实i有遍历，这个语句可以及时停止
+                return ending;
+            if (i > 0 && nums[i] == nums[i-1])  // 去重操作一：对于nums[i]的去重
+                continue;
+            left = i + 1;
+            right = nums.size() - 1;
+            while (left < right) { // 此处不能加=，会存在重复值
+                if (nums[i]+nums[left]+nums[right] > 0) // 值偏大，左移 ，此处不加left < right的原因是，不是连续减值
+                    right--;
+                else if (nums[i]+nums[left]+nums[right] < 0) // 值偏小， 右移
+                    left++;
+                else {
+                    ending.push_back(vector<int>{nums[i],nums[left],nums[right]});
+                    while (left < right && nums[right] == nums[right-1]) // 去重操作二：右边界去重
+                        right--;
+                    while (left < right && nums[left] == nums[left+1])  // 去重操作三：左边界去重
+                        left++;
+                    // 保持i不变的前提下，继续寻找下一组
+                    right--; 
+                    left++;
+                }
+            }
+        }
+        return ending;
+    }
+};
