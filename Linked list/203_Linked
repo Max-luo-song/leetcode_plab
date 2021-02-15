@@ -1,0 +1,32 @@
+/*
+ * 算法思想：建立空头节点，这样可以统一删除格式。注意p的next的指针移动时，只有不删除的时候才移动。删除一个之后，不移动继续判断下一个
+*/
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        ListNode* new_head = new ListNode(0);  // 建立新节点，使用构造函数
+        new_head->next = head;
+        ListNode* p = new_head;
+        while (p->next != NULL) {
+            if (p->next->val == val) {
+                ListNode* tmp = p->next;
+                p->next = p->next->next;
+                delete tmp;         // 注意释放多余空间
+            }
+            else {                  // 注意此处是else
+                p = p->next;
+            }
+        }
+        return new_head->next;
+    }
+};
