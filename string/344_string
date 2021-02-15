@@ -1,0 +1,18 @@
+/*
+ *   算法思想：本题实现字符串逆序，借用与双指针思想（尾指针使用长度+索引实现）。
+ *             需要注意的是对于交换元素可以使用swap()
+*/
+class Solution {
+public:
+    void reverseString(vector<char>& s) {
+        for (int i=0; i<s.size()/2; i++) {
+            /*
+            char tmp;
+            tmp = s[i];
+            s[i] = s[s.size()-1-i];
+            s[s.size()-1-i] = tmp;
+            */
+            swap(s[i],s[s.size()-1-i]);
+        }
+    }
+};
