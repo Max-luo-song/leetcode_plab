@@ -1,0 +1,31 @@
+/*
+ *  算法思想：逆波兰式的计算是典型的栈应用，判断输入是属于符号还是数字即可。主要不要弄错/和-的顺序。
+ *          本题中需要将string类型的数字转化为十进制，使用成型的函数stio即可
+*/
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack <int> num;
+        for (int i=0; i<tokens.size(); i++) {
+            if (tokens[i] == "+" || tokens[i] == "-" || tokens[i] == "*" || tokens[i] == "/") {
+                int num1 = num.top(); // 分母
+                num.pop();
+                int num2 = num.top(); // 分子
+                num.pop();
+                int temp;
+                if (tokens[i] == "+") 
+                    temp = num1 + num2;
+                else if (tokens[i] == "-")
+                    temp = num2 - num1;
+                else if (tokens[i] == "*")
+                    temp = num1 * num2;
+                else if (tokens[i] == "/")
+                    temp = num2 / num1;
+                num.push(temp);
+            }
+            else
+                num.push(stoi(tokens[i])); // stoi()专门将string类型转换成十进制的，使用的头文件为string.h
+        }
+        return num.top();
+    }
+};
