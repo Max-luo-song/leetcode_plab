@@ -1,0 +1,66 @@
+/*
+ *  算法思想：本题适用的结构显然是队列，难点在于如何从现存队列中选出最大值。常规的遍历算法会超时。可以采用单调队列的方式，单调队
+ *  列常使用dqueue完成。时刻维护队列的最大值在队列的首部。这样问题转化成如何如何加入和删除？
+ *  在加入时，如果当前元素必入口元素小，没必要加入。在删除时如果当前最大值就是要删除的，则从前面删除元素
+*/
+/*class Solution {
+public:
+    int Max(queue<int> que) {
+        int max = -10001;
+        while (!que.empty()) {
+            int top = que.front();
+            if (top > max)
+                max = top;
+            que.pop();
+        }
+        return max;
+    }
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        queue<int> que;
+        vector<int> ending;
+        for (int i=0; i<nums.size(); i++) {
+            if (que.size() < k-1)
+                que.push(nums[i]);
+            else {
+                que.push(nums[i]);
+                int max = Max(que);
+                ending.push_back(max);
+                que.pop();
+            }
+        }
+        return ending;
+    }
+};*/
+class Solution {
+private:
+    class MyQueue{
+        public:
+            deque<int> que;
+            void pop(int value) {
+                if (!que.empty() && value == que.front()) // 删除元素为当前最大元素，从前面删除
+                    que.pop_front();
+            }
+            void push(int value) {
+                while (!que.empty() && value > que.back()) // 删除那些比当前插入元素更小的，保证递减
+                    que.pop_back();
+                que.push_back(value);
+            }
+            int front() {
+                return que.front();
+            }
+    };
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        MyQueue que;
+        vector<int> ending;
+        for (int i=0; i<k; i++)
+            que.push(nums[i]);
+        ending.push_back(que.front());
+        for (int i=k; i<nums.size(); i++) {
+            que.pop(nums[i-k]); // 此处是i-k，删除的是框的最左侧
+            que.push(nums[i]);
+            ending.push_back(que.front());
+        }
+        return ending;
+    }
+};
