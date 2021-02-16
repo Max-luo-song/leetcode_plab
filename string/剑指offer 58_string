@@ -1,0 +1,27 @@
+/*
+ *     算法思想：常规算法是使用切片的方法，将前半段和后半段分割开。这里分出后半段的方式是将前半段删除。再拼接到一起。空间复杂度
+ *              为O（n）
+ *              另外就是按照翻转的的特点，对前半段进行翻转，对后半段进行翻转。最后再对整体进行翻转。类似于(A逆B逆)逆 = BA
+*/
+/*class Solution {
+public:
+    string reverseLeftWords(string s, int n) {
+        string p;
+        for (int i=0; i<n; i++) {
+            p += s[i];
+        }
+        s.erase(s.begin(),s.begin()+n);
+        s = s + p;
+        return s;
+    }
+};*/
+
+class Solution {
+public:
+    string reverseLeftWords(string s, int n) {
+        reverse(s.begin(), s.begin()+n);
+        reverse(s.begin()+n, s.end());
+        reverse(s.begin(), s.end());
+        return s;
+    }
+};
