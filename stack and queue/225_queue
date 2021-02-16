@@ -1,0 +1,57 @@
+/*
+ *      算法思想：队列的实现与栈不同。注意在queue的pop()出队列的元素是front元素，所以仍是输入顺序
+ *               queue2的中转作用只是为queue1提供相同的输入。
+ *               queue.front()-最前面元素 queue.size()-队列中元素个数
+ *               queue.back()-最后面元素  queue.empty()-队列中是否为空
+*/
+class MyStack {
+public:
+    queue <int> queue1;
+    queue <int> queue2;
+    /** Initialize your data structure here. */
+    MyStack() {
+
+    }
+    
+    /** Push element x onto stack. */
+    void push(int x) {
+        queue1.push(x);
+    }
+    
+    /** Removes the element on top of the stack and returns that element. */
+    int pop() {
+        while (queue1.size() != 1) {
+            queue2.push(queue1.front());
+            queue1.pop();
+        }
+        int temp = queue1.front();
+        queue1.pop();
+        while (!queue2.empty()) {
+            queue1.push(queue2.front());
+            queue2.pop();
+        }
+        return temp;
+    }
+    
+    /** Get the top element. */
+    int top() {
+        return queue1.back();
+    }
+    
+    /** Returns whether the stack is empty. */
+    bool empty() {
+        if (queue1.empty())
+            return true;
+        else
+            return false;
+    }
+};
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack* obj = new MyStack();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->top();
+ * bool param_4 = obj->empty();
+ */
