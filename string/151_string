@@ -1,0 +1,33 @@
+/*
+ * 算法思想：本题是实现字符串中单词的翻转。主要有两部分内容：1.单词翻转。2。去除多余空格
+ *          整体思路可以采用先去除多余空格，再将这个句子进行翻转（达到单词顺序正确的目的），再将每个单词进行翻转
+ *          对于空格的移去，可以采用双指针法（比较麻烦）。但本程序中只对于不为空格处进行处理，避开了这一问题。同时从前向后移动， 
+ *          保证了后面有效内容的保留。
+ *          也可以使用双端队列的方式，先去除首尾空格。以单词为单位，从左端进入，再从左端输出
+ *          
+*/
+class Solution {
+public:
+    string reverseWords(string s) {
+        reverse(s.begin(), s.end());
+        int n = s.size();
+        int end = 0;
+        int idx = 0; // idx代表真实单词的索引
+        for (int start=0; start<n; start++) {
+            if (s[start] != ' ') {  // 只对非空格进行处理，这样就避免了对于三种空格（前，中，后）的讨论
+                if (idx != 0) {     // 如果idx不为0，说明不是第一个单词，那么后面要加一个空格
+                    s[idx++] = ' ';
+                }
+                end = start;
+                while (end<n && s[end] != ' ') {    // 寻找单词末尾
+                    s[idx++] = s[end++];
+                }
+                reverse(s.begin()+idx-(end-start), s.begin()+idx); // 找到末尾后，对该单词进行翻转。单词长度为end-start+1，但后面开始处已经包含一位，差距只有end-start
+                start = end;
+            }
+        }
+        s.erase(s.begin()+idx, s.end()); // 使用erase函数是删除作用
+        //s.resize(s.begin()+idx);       // 对于string类型没有resize函数，只属于vector
+        return s;
+    }
+};
