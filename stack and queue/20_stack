@@ -1,0 +1,25 @@
+/*
+ *    算法思想：字符串匹配是经典的栈应用，需要特别注意的一点是当出现右侧时，要判断当前是否还有元素。如果没有说明有错
+*/
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> stack1;
+        for (int i=0; i<s.size(); i++) {
+            if (s[i] == '(' || s[i] == '{' || s[i] == '[')
+                stack1.push(s[i]);
+            else {
+                if (stack1.empty())
+                    return false;
+                char temp = stack1.top();
+                if ((s[i] == ')' && temp != '(') || (s[i] == '}' && temp != '{') || (s[i] == ']' && temp != '['))
+                    return false;
+                stack1.pop();
+            }
+        }
+        if (stack1.size() == 0)
+            return true;
+        else
+            return false;
+    }
+};
