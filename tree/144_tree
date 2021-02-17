@@ -29,3 +29,30 @@ public:
         return ending;
     }
 };
+
+/*
+ *  算法思想：非递归法实现前序遍历
+*/
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> ending;
+        if (root == NULL)
+            return ending;
+        stack <TreeNode *> stack1;
+        TreeNode *p = root;
+        while (!stack1.empty() || p != NULL) {
+            if (p != NULL) {
+                stack1.push(p);
+                ending.push_back(p->val);
+                p = p->left;
+            }
+            else {
+                p = stack1.top();
+                stack1.pop();
+                p = p->right;
+            }
+        }
+        return ending; 
+    }
+};
