@@ -29,3 +29,35 @@ public:
         return ending;
     }
 };
+
+/*
+ *     算法思想：二叉树后序遍历的非递归实现——双栈法。与之前两种方法不同，以一栈的左右遍历为基础。注意一定是先左后右。这样保证转
+ *              两次之后还是先左后右
+*/
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> ending;
+        if (root == NULL)
+            return ending;
+        stack<TreeNode *> stack1;
+        stack<TreeNode *> stack2;
+        TreeNode *p = root;
+        stack1.push(p);
+        while (!stack1.empty()) {
+            p = stack1.top();
+            stack1.pop();
+            stack2.push(p);            
+            if (p->left != NULL)
+                stack1.push(p->left);
+            if (p->right != NULL)
+                stack1.push(p->right);
+        }
+        while (!stack2.empty()) {
+            p = stack2.top();
+            stack2.pop();
+            ending.push_back(p->val);
+        }
+        return ending;
+    }
+};
