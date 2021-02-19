@@ -1,0 +1,59 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+ /*
+  *     算法思想：前序+中序和后序+中序类似。把切割点调整为pre的部分第一个。其余基本思想与后序+中序一致
+  *         本题是根据后序+中序完成建树，整体的思路是以后序切割（后序列表最后一个点是根节点）。
+  *               找到根节点之后，在中序中找出位置。这样可以将中序分三部分。
+  *               对后序进行切割，左右部分按照与中序左右相同。整体需要使用递归实现
+ */
+class Solution {
+public:
+    TreeNode* reverse(vector<int> &preorder, int pre_begin, int pre_end, vector<int>& inorder, int in_begin, int in_end) {
+        if (pre_end == pre_begin)
+            return NULL;
+        int value = preorder[pre_begin];
+        TreeNode* root = new TreeNode(value);
+        if (pre_end-pre_begin == 1)
+            return root;
+        int mid;
+        for (mid=in_begin; mid<in_end; mid++) {
+            if (inorder[mid] == value)
+                break;
+        }
+        //vector<int> inorder_left(inorder.begin(), inorder.begin()+mid);
+        //vector<int> inorder_right(inorder.begin()+mid+1, inorder.end());
+        int leftInorderBegin = in_begin;
+        int leftInorderEnd = mid;
+
+        int rightInorderBegin = mid+1;
+        int rightInorderEnd = in_end;
+
+        int leftPreBegin = pre_begin+1;
+        int leftPreEnd = pre_begin+1+mid-in_begin;
+
+        int rightPreBegin = pre_begin+1+mid-in_begin;
+        int rightPreEnd = pre_end;
+
+        //vector<int> preorder_left(preorder.begin()+1, preorder.begin()+1+inorder_left.size());
+        //vector<int> preorder_right(preorder.begin()+1+inorder_left.size(), preorder.end());
+
+        root->left = reverse(preorder,leftPreBegin,leftPreEnd,inorder, leftInorderBegin,leftInorderEnd);
+        root->right = reverse(preorder, rightPreBegin,rightPreEnd, inorder, rightInorderBegin,rightInorderEnd);
+
+        return root;
+    }
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        if (preorder.size() == 0 || inorder.size() == 0)
+            return NULL;
+        return reverse(preorder,0,preorder.size(),inorder,0,inorder.size()); // 原则：左闭右开
+    }
+};
