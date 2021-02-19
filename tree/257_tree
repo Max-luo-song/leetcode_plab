@@ -1,0 +1,56 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+
+ /*
+  *     算法思想：本题是实现根节点到叶子节点的路径，是从上到下的过程。所以选择前序遍历。
+  *               中间节点的判断是在进入循环的时候，依次进行左右（在不为NULL的情况下）。
+  *               C++中int转string可以使用函数to_string()
+ */
+class Solution {
+public:
+    void res(TreeNode* root, vector<int> &path, vector<string> &result) {
+        path.push_back(root->val);
+        // 中
+        if (root->left == NULL && root->right == NULL) {
+            string temp;
+            for (int i=0; i<path.size()-1; i++) {
+                temp += to_string(path[i]);
+                temp += "->";
+            }
+            temp += to_string(path[path.size()-1]);
+            result.push_back(temp);
+        }
+
+        /*
+         *      左右中两个pop_back,而不是在两个之后用一个pop_back的原因是。回溯和递归是一一对应的，对于回溯类问题，都要以这种方式处理
+        */
+        // 左
+        if (root->left) {
+            res(root->left, path, result);
+            path.pop_back();
+        }
+
+        // 右
+        if (root->right) {
+            res(root->right, path, result);
+            path.pop_back();
+        }
+    }
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector <string> result;
+        vector <int> path;
+        if (root == NULL)
+            return result;
+        res(root, path, result);
+        return result;
+    }
+};
