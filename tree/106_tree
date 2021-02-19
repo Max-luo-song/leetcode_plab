@@ -1,0 +1,50 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+ /*
+  *     算法思想：本题是根据后序+中序完成建树，整体的思路是以后序切割（后序列表最后一个点是根节点）。
+  *               找到根节点之后，在中序中找出位置。这样可以将中序分三部分。
+  *               对后序进行切割，左右部分按照与中序左右相同。整体需要使用递归实现
+ */
+class Solution {
+public:
+    TreeNode* traverse(vector<int>& inorder, vector<int>& postorder) {
+        if (postorder.size() == 0)
+            return NULL;
+        int value = postorder[postorder.size()-1];
+        TreeNode *root = new TreeNode(value);
+        if (postorder.size() == 1) // 剩一个，就是根节点
+            return root;
+        // 寻找分割点
+        int index;
+        for (index=0; index<inorder.size(); index++) {
+            if (inorder[index] == value)
+                break;
+        }
+        // 中序分割
+        vector<int> left_inorder(inorder.begin(), inorder.begin()+index);
+        vector<int> right_inorder(inorder.begin()+index+1, inorder.end());
+        // 后序分割
+        postorder.resize(postorder.size()-1);
+        vector<int> left_post(postorder.begin(), postorder.begin()+left_inorder.size());
+        vector<int> right_post(postorder.begin()+left_inorder.size(), postorder.end());
+        // 递归调用
+        root->left = traverse(left_inorder, left_post);
+        root->right = traverse(right_inorder, right_post);
+        
+        return root;
+    }
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        if (inorder.size() == 0 || postorder.size()  == 0)
+            return NULL;
+        return traverse(inorder, postorder);
+    }
+};
