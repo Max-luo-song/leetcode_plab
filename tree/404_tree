@@ -1,0 +1,28 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+ /*
+  *     算法思想：本题还是用递归的方式解决，从上而下选择前序。需要特别注意的是本题不是左节点，而是左叶子节点。
+  *               sum的判断条件不能是root->left而应该是root->left->left == NULL && root->left->right == NULL
+  *               非递归思想就是遍历节点，判断是否为左叶子
+ */
+class Solution {
+public:
+    int sumOfLeftLeaves(TreeNode* root) {
+        if (root == NULL)
+            return 0;
+        int sum = 0;
+        if (root->left && root->left->left == NULL && root->left->right == NULL)
+            sum = root->left->val;  // 此处+=或者=都可以，因为sum初值为0，但最好还是等于，体现出每一层的递归
+        sum += sumOfLeftLeaves(root->left);
+        sum += sumOfLeftLeaves(root->right);
+        return sum;
+    }
+};
