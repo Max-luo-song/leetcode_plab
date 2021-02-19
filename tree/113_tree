@@ -1,0 +1,47 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+ /*
+  *     算法思想：本题按照规则，属于遍历所有，没有返回值
+  *               整体类似于路径求和，重点在把vector<int> 和vecotr<vecotr>都当成全局变量处理。对于总值还是使用递减方式
+  *               回溯包括两部分：sum值的增加，vector<int>的pop（）
+  *               对于sum值，使用引用和不使用都可以，决定sum需不需要显式自加
+ */
+class Solution {
+public:
+    vector<vector<int>> ending;
+    vector<int> temp;
+    void Cal(TreeNode *root, int sum) {
+        //vector<int> temp;
+        sum -= root->val;
+        temp.push_back(root->val);
+        if (sum == 0 && !root->left && !root->right) {
+            ending.push_back(temp);
+            return ;
+        }
+        if (root->left) {
+            Cal(root->left, sum);
+            temp.pop_back();
+            //sum += root->left->val;
+        }
+        if (root->right) {
+            Cal(root->right, sum);
+            temp.pop_back();
+            //sum += root->right->val;
+        }
+    }
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+        if (root == NULL)
+            return ending;
+        Cal(root, targetSum);
+        return ending;
+    }
+};
