@@ -1,0 +1,55 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+
+ /*
+  *     算法思想：本题是对二叉搜索树的判断，提供了一种错误方法：不能把当前节点左节点小，右节点大当作标准。应该以树作为比较对象
+  *               root->left->val >= root->val root->right->val <= root->val是不够的
+  *               于是利用二叉搜索树中序遍历应当递增，来判断是否有效
+ */
+ // 错误方法
+/*class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        if (root == NULL)
+            return true;
+        if (root->left != NULL || root->right != NULL) {
+            if (root->left != NULL && root->left->val >= root->val)
+                return false;
+            if (root->right != NULL && root->right->val <= root->val)
+                return false;
+        }
+        else
+            return true;
+        return isValidBST(root->left) && isValidBST(root->right);
+    }
+};*/
+
+// 正确方法
+class Solution {
+public:
+    void order(TreeNode* root, vector<int> &ending) { // 此处必须为中序遍历
+        if (root != NULL) {
+            order(root->left, ending);
+            ending.push_back(root->val);
+            order(root->right, ending);
+        }
+    }
+    bool isValidBST(TreeNode* root) {
+        vector <int> ending;
+        order(root, ending);
+        for (int i=0; i<ending.size()-1; i++) {
+            if (ending[i+1] <= ending[i])
+                return false;
+        }
+        return true;
+    }
+};
