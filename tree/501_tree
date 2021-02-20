@@ -1,0 +1,48 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ /*
+  *     算法思想：本题分为两部分，二叉搜索树+众数。根据二叉搜索树形成数组，寻找众数利用了map
+  *               遍历map寻找最大值，将次数等于最大值的值放入结果
+  *               map的遍历方式可以使用auto，利用.first,.second做判断
+  *               但该算法效率不高，可优化空间：在形成数组时就可判断出现最大次数
+ */
+class Solution {
+public:
+    void order(TreeNode*root, vector<int>& ending) {
+        if (root != NULL) {
+            order(root->left, ending);
+            ending.push_back(root->val);
+            order(root->right, ending);
+        }
+    }
+    vector<int> findMode(TreeNode* root) {
+        vector<int> ending;
+        if (root == NULL)
+            return ending;
+        vector<int> temp;
+        order(root, temp);
+        unordered_map<int, int> map;
+        for (int i=0; i<temp.size(); i++) 
+            map[temp[i]]++;
+        int max = INT_MIN;
+        // 寻找最大值
+        for (auto iter:map) {
+            if (iter.second > max)
+                max = iter.second;
+        }
+        // 根据最大值放置结果
+        for (auto iter:map) {
+            if (iter.second == max) {
+                ending.push_back(iter.first);
+            }
+        }
+        return ending;
+    }
+};
