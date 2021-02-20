@@ -1,0 +1,35 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ /*
+  *     算法思想：根据二叉搜索树特性建立有序数组，所有值均为正数。进行比较取最小值
+  *               可优化空间：定义一个全局变量，以及保留之前值得变量。在遍历时即进行判断，省的定义一个数组
+*/
+class Solution {
+public:
+    void order(TreeNode* root, vector<int>& ending) {
+        if (root != NULL) {
+            order(root->left, ending);
+            ending.push_back(root->val);
+            order(root->right, ending);
+        }
+    }
+    int getMinimumDifference(TreeNode* root) {
+        if (root == NULL)
+            return 0;
+        vector<int> ending;
+        order(root, ending);
+        int min = INT_MAX;
+        for (int i=0; i<ending.size()-1; i++) {
+            if (ending[i+1]-ending[i] < min)
+                min = ending[i+1]-ending[i];
+        }
+        return min;
+    }
+};
