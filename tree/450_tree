@@ -1,0 +1,52 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+ /*
+  *     算法思想：搜索二叉树的删除情况较多，存在以下五种情况：
+  *               1.没有找到该节点
+  *               2.目标结点的左为空，返回右节点
+  *               3.目标结点的右为空，返回左节点
+  *               4.目标节点的左右都空，删除该节点，返回NULL，可与2，3合并
+  *               5.目标节点左右都不空
+  *              对于第五点情况比较复杂，整体按照如下逻辑：寻找目标节点右子树的最左节点A，将目标结点的左子树接到A的左边。
+  *              返回目标节点的右节点，对左节点进行删除
+ */
+class Solution {
+public:
+    TreeNode* deleteNode(TreeNode* root, int key) {
+        if (root == NULL) // 情况1
+            return root;
+        if (root->val == key) {
+            if (root->left == NULL) // 情况2，隐含情况4
+                return root->right;
+            else if (root->right == NULL) // 情况3
+                return root->left;
+            else { // 情况5
+                // 寻找目标节点右子树的最左节点
+                TreeNode* cur = root->right;
+                while (cur->left) { // 注意是cur->left
+                    cur = cur->left;
+                }
+                cur->left = root->left; // 左子树转移
+                TreeNode* tmp = root;
+                root = root->right; // 右子树替代
+                delete tmp;
+                return root;
+            }
+        }
+        // 利用搜索二叉树特性，并且注意有返回值
+        if (root->val > key)
+            root->left = deleteNode(root->left, key);
+        else if (root->val < key)
+            root->right = deleteNode(root->right, key);
+        return root;
+    }
+};
