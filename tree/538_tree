@@ -1,0 +1,31 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+ /*
+  *     算法思想：观察本题特点，本题是节点值得累加，整体顺序是右中左。可以采取一个变量保留之前的值
+  *               这样逆中序遍历即可
+ */
+class Solution {
+public:
+    int pre = 0;
+    void inverse(TreeNode* root) {
+        if (root != NULL) {           
+            inverse(root->right); // 右
+            root->val += pre;     // 中  
+            pre = root->val;
+            inverse(root->left);  // 左
+        }
+    }
+    TreeNode* convertBST(TreeNode* root) {
+        inverse(root);
+        return root;
+    }
+};
