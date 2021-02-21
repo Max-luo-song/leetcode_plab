@@ -1,0 +1,46 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+/*
+ *      算法思想：本题是公共祖先，可以按照之前的方法递归实现。但本题是搜索二叉树，可以利用一些有序的特性。
+ *                搜索二叉树的有序性，但不知道的是p,q的大小关系。但只要出现不是绝对的大或小就是存在问题
+*/
+/*class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (root ==  NULL || root == p || root == q)
+            return root;
+        TreeNode* left = lowestCommonAncestor(root->left, p, q);
+        TreeNode* right = lowestCommonAncestor(root->right, p, q);
+        if (!left && right)
+            return right;
+        else if (left && !right)
+            return left;
+        else if (!left && !right)
+            return NULL;
+        else    
+            return root;
+    }
+};*/
+
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        while (root != NULL) {
+            if (root->val > p->val && root->val > q->val) // 绝对大，说明在左侧
+                root = root->left;
+            else if (root->val < p->val && root->val < q->val) // 绝对小，说明在右侧
+                root = root->right;
+            else
+                return root;
+        }
+        return root;
+    }
+};
