@@ -1,0 +1,30 @@
+/*
+ *   算法思想：本题第一看没有思路，因为存在两重对应关系。数字对应于字母，每个字母去进行回溯。
+ *            实现过程中传入参数是数字，将数字转化成对应的字符串。对字符串中的每一个使用for循环
+ *             相当于第一层对应关系使用逻辑处理，后面的一层对应关系使用回溯处理
+*/
+class Solution {
+private:
+string letterMap[10] = {"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"}; // 0-9对应字符
+public:
+    string temp;
+    vector<string> ending;
+    void back(string digits, int index) {
+        if (index == digits.length()) {
+            ending.push_back(temp);
+            return ;
+        }
+        string letter = letterMap[digits[index]-'0'];
+        for (int i=0; i<letter.length(); i++) {
+            temp.push_back(letter[i]);
+            back(digits, index+1);
+            temp.pop_back();
+        }
+    }
+    vector<string> letterCombinations(string digits) {
+        if (digits.length() == 0) // 对空字符串首先进行特殊处理
+            return ending;
+        back(digits, 0);
+        return ending;
+    }
+};
