@@ -15,7 +15,7 @@ void backtracking(参数) {
 /*
  *  算法思想：本题属于经典的回溯算法。套用回溯算法的模板
 */
-class Solution {
+/*class Solution {
 public:
     vector<vector<int>> ending;
     vector<int> path;
@@ -28,6 +28,29 @@ public:
             path.push_back(i); // 主要操作
             back(n, k, i+1); // 递归进入下一层
             path.pop_back(); // 回溯操作
+        }
+    }
+    vector<vector<int>> combine(int n, int k) {
+        back(n, k, 1);
+        return ending;
+    }
+};*/
+/*
+ *    剪枝操作：对于1-4取3个来说，3，4开始不存在。即剩余所有不满足最小的个数要求。据此进行剪枝
+*/
+class Solution {
+public:
+    vector<vector<int>> ending;
+    vector<int> path;
+    void back(int n, int k, int startindex) {
+        if (path.size() == k) {
+            ending.push_back(path);
+            return ;
+        }
+        for (int i=startindex; i<= n-(k-path.size())+1; i++) { // 在for循环上调整进行剪枝
+            path.push_back(i);
+            back(n, k, i+1);
+            path.pop_back();
         }
     }
     vector<vector<int>> combine(int n, int k) {
