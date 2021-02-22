@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<int> path;
+    vector<vector<int>> ending;
+    int sum = 0;
+    void back(int k, int n, int startindex) {
+        if (sum > n) // 剪枝优化，如果和已经超过了就直接剪掉
+            return ;
+        if (path.size() == k) {
+            if (sum == n)
+                ending.push_back(path);
+            return ;
+        }
+        for (int i=startindex; i<=9; i++) {
+            path.push_back(i);
+            sum += i;
+            back(k, n, i+1);
+            path.pop_back();
+            sum -= i; // 回溯操作对应的是本层递归的处理，是i不是i+1
+        }
+    }
+    vector<vector<int>> combinationSum3(int k, int n) {
+        back(k, n, 1);
+        return ending;
+    }
+};
