@@ -1,0 +1,30 @@
+/*
+ *      算法思想：本题仍是回溯组合问题，与之前不同的是这次的个数不限定。并且可以有重复元素。
+ *                组合问题需要startIndex，而排列就可以不用
+*/
+class Solution {
+public:
+    vector <int> path;
+    vector<vector<int>> result;
+    int sum = 0;
+    void back(vector<int>& candidates, int target, int startIndex) {
+        if (sum > target)
+            return ;
+        if (sum == target) {
+            result.push_back(path);
+            return ;
+        }
+        for (int i=startIndex; i<candidates.size() ; i++) {
+            path.push_back(candidates[i]);
+            sum += candidates[i];
+            back(candidates, target, i); // startIndex是i而不是i+1，说明可以重复
+            path.pop_back();
+            sum -= candidates[i];
+        }
+    }
+
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        back(candidates, target, 0);
+        return result;
+    }
+};
