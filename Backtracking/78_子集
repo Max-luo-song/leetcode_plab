@@ -1,0 +1,22 @@
+/*
+ *  算法思想：本题属于回溯类型，与之前不同的是进入结果结合没有条件束缚
+ *           本题强调元素互不相同，不能有重复子集，所以用startIndex+1进入
+ *           其余的套用本地模板即可
+*/
+class Solution {
+public:
+    vector<vector<int>> ending;
+    vector<int> path;
+    void back(vector<int>& nums, int startIndex) {
+        ending.push_back(path);
+        for (int i=startIndex; i<nums.size(); i++) {
+            path.push_back(nums[i]);
+            back(nums, i+1);
+            path.pop_back();
+        }
+    }
+    vector<vector<int>> subsets(vector<int>& nums) {
+        back(nums, 0);
+        return ending;
+    }
+};
