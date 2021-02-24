@@ -1,0 +1,47 @@
+/*
+ *  算法思想：本题在于如何对字符进行切割插入。最终判断进结果的条件是三个小数点全有，并且剩余最后的有效。
+ *           对于每个子串有效进行递归，无效的话直接返回，不需要判断后面几个子串
+*/
+class Solution {
+public:
+    vector<string> ending;
+    int pointnum = 0;
+    void back(string &s, int startIndex) {
+        if (pointnum == 3) {
+            if (isValid(s, startIndex, s.size()-1)) {
+                ending.push_back(s);
+            }
+            return ;
+        }
+        for (int i=startIndex; i<s.length(); i++) {
+            if (isValid(s, startIndex, i)) {
+                pointnum++;
+                s.insert(s.begin()+i+1, '.'); // 在原地进行修改
+                back(s, i+2); // 因为之前加了.，所以此处是i+2
+                pointnum--;
+                s.erase(s.begin()+i+1); // 结束后，要把点删除
+            }
+            else
+                break;  
+        }
+    }
+    bool isValid(string s, int began, int end) {
+        if (began > end) // began超过end无效
+            return false;
+        if (s[began] == '0' && began != end) // 第一个字母为0无效
+            return false;
+        int num = 0;
+        for (int i=began; i<=end; i++) {
+            if (s[i] <'0' || s[i] > '9') // 出现其他字符无效
+                return false;
+            num  = num*10+(s[i]-'0'); 
+            if (num > 255) // 超过255无效
+                return false;
+        }
+        return true;
+    }
+    vector<string> restoreIpAddresses(string s) {
+        back(s, 0);
+        return ending;
+    }
+};
