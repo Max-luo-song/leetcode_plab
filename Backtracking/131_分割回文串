@@ -1,0 +1,38 @@
+/*
+ *   算法思想：本题是回溯类问题，只不过有两层映射关系不太好掌握。与常规回溯不同的是，path里面的是一个个小模块
+ *             所以经过第一层判断，回文序列才进入path。而进入ending的说明到了最后，以startIndex和字符串长度的关系去评价
+*/
+class Solution {
+public:
+    vector<vector<string>> ending;
+    vector<string> path;
+    string temp;
+    bool isHW(string temp) {
+        for (int i=0; i<temp.length()/2; i++) {
+            if (temp[i] != temp[temp.length()-1-i])
+                return false;
+        }
+        return true;
+    }
+    void back(string s, int startIndex) {
+        if (startIndex >= s.length()) { // 第二次判断，到达最后送入结果 
+            ending.push_back(path);
+            return ;
+        }
+        for (int i=startIndex; i<s.length(); i++) {
+            string str = s.substr(startIndex, i-startIndex+1); // 截取子串使用substr函数，第一个参数是开始位置，第二个参数是长度
+            if (isHW(str)) { // 第一次判断，只有回文序列才送入
+                path.push_back(str);
+            }
+            else {
+                continue;
+            }
+            back(s, i+1);
+            path.pop_back();
+        }
+    }
+    vector<vector<string>> partition(string s) {
+        back(s, 0);
+        return ending;
+    }
+};
