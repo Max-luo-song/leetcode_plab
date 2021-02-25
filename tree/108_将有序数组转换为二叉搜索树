@@ -19,11 +19,11 @@ public:
     TreeNode* reverse(vector<int>& nums, int left, int right) {
         if (left > right)
             return NULL;
-            int mid = left + ((right-left)) / 2;
-            TreeNode *root = new TreeNode(nums[mid]);
-            root->left = reverse(nums, left, mid-1); // 循环不变量是左闭右闭，所以是mid-1和mid+1
-            root->right = reverse(nums, mid+1, right);
-            return root;
+        int mid = left + ((right-left)) / 2;
+        TreeNode *root = new TreeNode(nums[mid]);
+        root->left = reverse(nums, left, mid-1); // 循环不变量是左闭右闭，所以是mid-1和mid+1
+        root->right = reverse(nums, mid+1, right);
+        return root;
     }
     TreeNode* sortedArrayToBST(vector<int>& nums) {
         return reverse(nums, 0, nums.size()-1);
