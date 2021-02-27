@@ -1,0 +1,29 @@
+/*
+ *     算法思想：对于排列问题，本题是最简单的。需要清楚排列和组合的区别，排列在每个组合只能用一次
+ *               而且排列可能下一个元素在后面。在排列中去掉startIndex,增加used作为标记当前组合是否访问过
+*/
+class Solution {
+public:
+    vector<vector<int>> ending;
+    vector<int> path;
+    void back(vector<int>& nums, vector<bool>& used) {
+        if (path.size() == nums.size()) {
+            ending.push_back(path);
+            return ;
+        }
+        for (int i=0; i<nums.size(); i++) {
+            if (used[i] == true) // used[i]代表访问过
+                continue;
+            path.push_back(nums[i]);
+            used[i] = true;
+            back(nums, used);
+            path.pop_back();
+            used[i] = false;
+        }
+    }
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<bool> used(nums.size(), false);
+        back(nums, used);
+        return ending;
+    }
+};
