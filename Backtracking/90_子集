@@ -1,0 +1,29 @@
+/*
+ *  算法思想：本题与上一道子集区别本题涉及到去重问题。回溯去重问题得思路一致：
+ *            加入used数组(bool类型，初始化为false)。加入continue判断，条件
+ *            是连续两个相同，且前一个used为false
+*/
+class Solution {
+public:
+    vector<vector<int>> ending;
+    vector<int> path;
+
+    void back(vector<int>&nums, int startIndex, vector<bool>& used) {
+        ending.push_back(path);
+        for (int i=startIndex; i<nums.size(); i++) {
+            if (i>0 && nums[i] == nums[i-1] && used[i-1] == false) // 对于回溯类去重问题加一个这个
+                continue;
+            path.push_back(nums[i]);
+            used[i] = true;
+            back(nums, i+1, used);
+            path.pop_back();
+            used[i] = false;
+        }
+    }
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        vector<bool> used(nums.size(), false);
+        sort(nums.begin(), nums.end()); // 去重一定要对集合排序
+        back(nums, 0, used);
+        return ending;    
+    }
+};
