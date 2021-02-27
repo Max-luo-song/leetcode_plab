@@ -1,0 +1,28 @@
+/*
+ *  算法思想：本题具有迷惑性，寻找该数组中的递增子序列。并且需要进行去重，也是水平的去重
+ *            去重的过程中进行判断筛选出符合条件的，如果nums值小于当前的最后，或者发生去重
+ *            就continue。其余的与一般回溯问题没区别
+*/
+class Solution {
+public:
+    vector<vector<int>> ending;
+    vector<int> path;
+    void back(vector<int>& nums, int startIndex) {
+        if (path.size() > 1)
+            ending.push_back(path); // 此处没有return因为可以大于2个
+        unordered_set<int> used;    // 没有sort的情况下，不能用相邻元素判断，用一个unordered_set进行判断是否水平相同
+        for (int i=startIndex; i<nums.size(); i++) {
+            // 两种可能：1.不满足递增子序列 2.发生去重
+            if ((!path.empty()&&nums[i]<path.back()) || (used.find(nums[i]) != used.end())) 
+                continue;
+            used.insert(nums[i]); // 只有insert没有Pop是因为used是一个局部变量
+            path.push_back(nums[i]);
+            back(nums, i+1);
+            path.pop_back();
+        }
+    }
+    vector<vector<int>> findSubsequences(vector<int>& nums) {
+        back(nums, 0);
+        return ending;
+    }
+};
