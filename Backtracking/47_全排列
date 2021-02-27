@@ -1,0 +1,32 @@
+/*
+ *      算法思想：本题属于带去重问题的排列问题，按照排列的套路加上去重的判断
+*/
+class Solution {
+public:
+    vector<vector<int>> ending;
+    vector<int> path;
+    void back(vector<int>& nums, vector<bool>& used, vector<bool>& judge) {
+        if (nums.size() == path.size()) {
+            ending.push_back(path);
+            return ;
+        }
+        for (int i=0; i<nums.size(); i++) {
+            if (used[i] == true || (i>0 && nums[i] == nums[i-1] && judge[i-1] == false)) // 排列+去重，剩下的按照模板
+                continue;
+            used[i] = true;
+            judge[i] = true;
+            path.push_back(nums[i]);
+            back(nums, used, judge);
+            path.pop_back();
+            used[i] = false;
+            judge[i] = false;
+        }
+    }
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        vector<bool> used(nums.size(), false); // 用于排列
+        vector<bool> judge(nums.size(), false); // 用于去重
+        sort(nums.begin(), nums.end());
+        back(nums, used, judge);
+        return ending;
+    }
+};
