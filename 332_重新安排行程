@@ -1,0 +1,35 @@
+/*
+ *  算法思想：本题是一道图论问题，但使用回溯进行解决（常规一点是深度优先搜索）。
+ *            了解即可，本题的迭代器比较难想。整体还是按照回溯的思路实现
+*/
+class Solution {
+private:
+    //unordered_map<出发点, map<目的地，目的地剩余班次>>
+    unordered_map<string, map<string, int>> targets;
+    bool back(int ticketnum, vector<string>& ending) {
+        if (ending.size() == ticketnum+1)
+            return true;
+        for (pair<const string, int>& target:targets[ending[ending.size()-1]]) {
+            if (target.second > 0) {
+                ending.push_back(target.first);
+                target.second--;
+                if (back(ticketnum, ending))
+                    return true;
+                ending.pop_back();
+                target.second++;
+            }
+        }
+        return false;
+    }
+public:
+
+    vector<string> findItinerary(vector<vector<string>>& tickets) {
+        vector<string> ending;
+        for (const vector<string>& vec : tickets) {
+            targets[vec[0]][vec[1]]++;
+        }
+        ending.push_back("JFK");
+        back(tickets.size(), ending);
+        return ending;
+    }
+};
