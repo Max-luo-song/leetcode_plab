@@ -1,0 +1,29 @@
+/*
+ *  算法思想：本题的还是用贪心算法解决，相较于之前的跳跃问题。优化目标变成了最小跳数，
+ *            使用两个变量衡量，当前能够到达的最远距离，和下一步到达的最远距离。
+ *            如果到达了当前的最远距离，还没有到终点需要再加一步
+*/
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        if (nums.size() == 1)
+            return 0;
+        int now_cover = 0; // 当前覆盖的最远距离
+        int next_cover = 0; // 下一步覆盖的最远距离
+        int count = 0;
+        for (int i=0; i<nums.size(); i++) {
+            next_cover = max(i+nums[i], next_cover);
+            if (i == now_cover) { // 到达当前距离最远
+                if (now_cover != nums.size()-1) { // 如果还没到最后，需要加步
+                    count++;
+                    now_cover = next_cover;
+                    if (next_cover > nums.size()-1) // 如果下一步的覆盖范围超过，直接退出。从0开始，一直保持左闭右开，0的时候跳第一下，count会自增。
+                        break;
+                }
+                else // 当前到达最后，不需要跳了 
+                    break;
+            }
+        }
+        return count;
+    }
+};
