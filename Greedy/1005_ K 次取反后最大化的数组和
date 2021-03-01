@@ -1,0 +1,69 @@
+/*
+ *  算法思想：本题还是通过贪心实现，两次贪心：
+ *            1.尽可能先把负数变正
+ *            2.在全正序列中，选最小的变换
+*/
+// 垃圾思路，一步一步实现
+/*class Solution {
+public:
+    int largestSumAfterKNegations(vector<int>& A, int K) {
+        for (int i=0; i<K; i++) {
+            int tag = 0; // tag等于0代表没有负数
+            int temp = INT_MAX; // temp存储绝对值最小负数
+            int temp_num; // 存储绝对值最小负数坐标
+            for (int j=0; j<A.size(); j++) {
+                if (A[j] < 0) {
+                    tag = 1;
+                    if (A[j] < temp) {
+                        temp = A[j];
+                        temp_num = j;
+                    }
+                }
+            }
+            if (tag == 0) {
+                int min = INT_MAX;
+                int min_num;
+                for (int j=0; j<A.size(); j++) {
+                    if (A[j] < min) {
+                        min = A[j];
+                        min_num = j;
+                    }
+                }
+                A[min_num] = -A[min_num];
+            }
+            else {
+                A[temp_num] = -A[temp_num];
+            }
+        }
+        int sum = 0;
+        for (int i=0; i<A.size(); i++) {
+            sum += A[i];
+        }
+        return sum;
+    }
+};*/
+/*
+ *  算法思想：先根据绝对值大小排序。尽可能消除负数，剩余的K次对绝对值最小的(最右侧)进行操作
+*/
+class Solution {
+public:
+    static bool cmp(int a, int b) { // 自己写的sort规则必须是static类型
+        return abs(a) > abs(b);
+    }
+    int largestSumAfterKNegations(vector<int>& A, int K) {
+        sort(A.begin(), A.end(), cmp);
+        for (int i=0; i<A.size(); i++) {
+            if (K>0 && A[i]<0) {
+                A[i] = -A[i];
+                K--;
+            }
+        }
+        while (K--) // 操作最右侧
+            A[A.size()-1] = -A[A.size()-1];
+        int sum = 0;
+        for (int i=0; i<A.size(); i++) {
+            sum += A[i];
+        }
+        return sum;
+    }
+};
