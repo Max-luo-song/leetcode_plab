@@ -1,0 +1,19 @@
+/*
+ *  算法思想：本题使用贪心求解，利用max判断局部最优，最后变为全局最优。
+ *            对于连续序列和问题，如果累加值变成了负数，那就不要了，从下一个开始
+*/
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int max = INT_MIN;
+        int count = 0;
+        for (int i=0; i<nums.size(); i++) {
+            count += nums[i]; // 每次增加新的
+            if (count > max)
+                max = count;
+            if (count < 0) // 如果为负，直接归0，下一循环累加相当于从下一个开始
+                count = 0;
+        }
+        return max;
+    }
+};
