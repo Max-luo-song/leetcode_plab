@@ -1,0 +1,21 @@
+/*
+ *  算法思想：贪心思想，将两个排序，大饼干给大孩子，双指针思想
+*/
+class Solution {
+public:
+    int findContentChildren(vector<int>& g, vector<int>& s) {
+        int count = 0;
+        sort(g.begin(), g.end());
+        sort(s.begin(),s.end());
+        for (int i=g.size()-1, j=s.size()-1; i>=0 && j>=0;) {
+            if (s[j] >= g[i]) { // 饼干足够
+                count++;
+                i--;
+                j--;
+            }
+            else if (s[j] < g[i]) // 饼干不够，换小胃口
+                i--;
+        }
+        return count;
+    }
+};
