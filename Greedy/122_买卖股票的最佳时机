@@ -1,0 +1,16 @@
+/*
+ *  算法思想：本题其实属于动态规划问题，但可以按照贪心的思路解决。
+ *            题目以两天为一个基本单位，day3-day1可转化成(day3-day2)+(day2-day1)
+ *            所以其实可以求所有相邻两天的，选择其中大于0的相加（局部最优），最终得到结果
+*/
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int money = 0;
+        for (int i=1; i<prices.size(); i++) {
+            if (prices[i]-prices[i-1] > 0)
+                money += prices[i]-prices[i-1];
+        }
+        return money;
+    }
+};
