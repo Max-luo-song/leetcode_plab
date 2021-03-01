@@ -1,0 +1,52 @@
+/*
+ *  算法思想：本题属于棋盘类问题，与N皇后问题不同的是，本题有9个数字填入，多了一个纬度
+ *            使用二维的方式实现。通过两层for循环，确定唯一的位置。通过回溯1-9进行填入
+ *            数独会给出一些初始化的数，用continue进行剪枝
+*/
+class Solution {
+public:
+    bool isValid(vector<vector<char>>& board, int row, int col, char data) {
+        // 判断行
+        for (int i=0; i<9; i++) { // 此处使用9，不适用col的原因是，数独有部分初始化的数值可能在下方。如果全部自己填，那么可以以当前为界限
+            if (board[row][i] == data)
+                return false;
+        }
+        // 判断列
+        for (int i=0; i<9; i++) { // 此处使用9，不适用row的原因是，数独有部分初始化的数值可能在下方。如果全部自己填，那么可以以当前为界限
+            if (board[i][col] == data)
+                return false;
+        }
+        //判断3x3
+        int row_num = row/3;
+        int col_num = col/3;
+        for (int i=row_num*3; i<row_num*3+3; i++) {
+            for (int j=col_num*3; j<col_num*3+3; j++) {
+                if (board[i][j] == data)
+                    return false;
+            }
+        }
+        return true;
+    }
+    bool back(vector<vector<char>>& board) {
+        for (int k=0; k<board.size(); k++) {
+            for (int i=0; i<board.size(); i++) {
+                if (board[k][i] != '.')
+                    continue;
+                for (char j='1'; j<='9'; j++) { // 常用索引都是int，但是本题更适合用char。根据情况实际判断
+                    if (isValid(board, k, i, j)) {
+                        board[k][i] = j;
+                        if (back(board))
+                            return true;
+                        board[k][i] = '.';
+                    }
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+    void solveSudoku(vector<vector<char>>& board) {
+        // 提供的board中已经初始化一部分数值，所以不能使用.全部初始化
+        back(board);
+    }
+};
