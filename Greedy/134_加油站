@@ -1,0 +1,41 @@
+/*
+ *  算法思想：1.常规算法暴力迭代，对每个都作为起点看是否能够通过
+ *            2.贪心算法，利用curSum统计当前剩余油量，如果小于0说明到i都不可能，结果在i+1及以后
+ *              如果无法到达，肯定是耗费油量更大。不存在前小后大中间出现断层的情况，那样说明开始节点不在这个区域
+*/
+/*class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        for (int i=0; i<gas.size(); i++) {
+            int rest = gas[i]-cost[i];
+            int index = (i+1)%gas.size();
+            while (rest>=0 && index != i) {
+                rest += gas[index]-cost[index];
+                index = (index+1)%gas.size();
+            }
+            if (rest >= 0)
+                return i;
+        }
+        return -1;
+    }
+};*/
+
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int curSum = 0;
+        int totalSum = 0;
+        int start = 0;
+        for (int i=0; i<gas.size(); i++) {
+            curSum += gas[i]-cost[i];
+            totalSum += gas[i]-cost[i];
+            if (curSum < 0) {
+                start = i+1;
+                curSum = 0;
+            }
+        }
+        if (totalSum < 0)
+                return -1;
+        return start;
+    }
+};
