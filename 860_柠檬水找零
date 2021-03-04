@@ -1,0 +1,33 @@
+/*
+ *  算法思想：本题思路清晰，模拟找零的情况没有几种。一一做判断即可，但其中隐含一个优先策略
+*/
+class Solution {
+public:
+    bool lemonadeChange(vector<int>& bills) {
+        int five_num = 0;
+        int ten_num = 0;
+        for (int i=0; i<bills.size(); i++) {
+            if (bills[i] == 5)
+                five_num++;
+            else if (bills[i] == 10) {
+                if (five_num > 0) {
+                    ten_num++;
+                    five_num--;
+                }
+                else
+                    return false;
+            }
+            else if (bills[i] == 20) {
+                if (five_num>0 && ten_num>0) { // 优先于找出10+5，而不是3*5。因为5更万能
+                    five_num--;
+                    ten_num--;
+                }
+                else if (ten_num == 0 && five_num > 3) 
+                    five_num -= 3;
+                else
+                    return false;
+            }
+        }
+        return true;
+    }
+};
