@@ -1,0 +1,27 @@
+/*
+ *  算法思想：本题实现的目标是如果分数值比左右两侧高，比左右数量要多。
+ *            使用贪心的方法，从左边遍历一次，从右遍历一次。
+ *            第一次遍历保证左边符合条件，完成局部贪心->全局贪心。第二次遍历的时候在比较和右边部分时，本身值和右边加1作比较，选最
+ *            大值保证两个都满足。其实第一遍比较的时候左右比较过一次，但第二次时右边的可能更新。对应也要更新左边
+*/
+class Solution {
+public:
+    int candy(vector<int>& ratings) {
+        vector<int> num(ratings.size(), 1);
+        for (int i=1; i<ratings.size(); i++) { // 顺序，满足大于左
+            if (ratings[i] > ratings[i-1]) 
+                num[i] = num[i-1] + 1;
+        }
+
+        for (int i=ratings.size()-1; i>0; i--) { // 逆序，满足大于右
+            if (ratings[i-1] > ratings[i]) 
+                num[i-1] = max(num[i]+1, num[i-1]);
+        }
+
+        int count = 0;
+        for (int i=0; i<ratings.size(); i++) {
+            count += num[i];
+        }
+        return count;
+    }
+};
