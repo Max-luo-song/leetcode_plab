@@ -1,0 +1,50 @@
+/*
+ *  算法思想：常规做法，每一次判断会超时
+*/
+/*class Solution {
+public:
+    bool Judge(int i) {
+        int pre = i%10;
+        int cur;
+        while (i) {
+            i = i/10;
+            cur = i%10;
+            if (cur > pre)
+                return false;
+            pre = cur;
+        }
+        return true;
+    }
+    int monotoneIncreasingDigits(int N) {
+        if (N < 10)
+            return N;
+        int i;
+        for (i=N; i>=0; i--) {
+            if (Judge(i))
+                break;
+        }
+        return i;
+    }
+};*/
+
+/*
+ *  算法思想：从后往前遍历，如果出现高位值大于低位，把高位值减1，低位值变9.要想满足条件，需要把改变过的最高位后面都变成9
+ *            使用flag做标记。对数字进行修改使用string更方便（技巧，需要记住），最后通过stio可以变回来
+*/
+class Solution {
+public:
+    int monotoneIncreasingDigits(int N) {
+        string strNum = to_string(N);
+        int flag = strNum.size();
+        for (int i=strNum.size()-1; i>0; i--) {
+            if (strNum[i-1] > strNum[i]) {
+                flag = i;
+                strNum[i-1]--;
+            }
+        }
+        for (int i=flag; i<strNum.size(); i++) {
+            strNum[i] = '9';
+        }
+        return stoi(strNum);
+    }
+};
