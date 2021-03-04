@@ -1,0 +1,37 @@
+/*
+ *  算法思想：本题属于贪心算法中的区间问题。首先进行排序，本题选择对于左边界进行排序。遍历数组，寻找范围。
+ *            利用left,right存储边界范围，当出现区间左边界在right之右时区间结束。
+*/
+class Solution {
+public:
+    static bool cmp(vector<int>& a, vector<int>& b) {
+        return a[0] < b[0];
+    }
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        if (intervals.size() == 1)
+            return intervals;
+        vector<vector<int>> ending;
+        sort(intervals.begin(), intervals.end(), cmp);
+        int left = intervals[0][0];
+        int right = intervals[0][1];
+        for (int i=1; i<intervals.size(); i++) {
+            if (intervals[i][0] <= right) {
+                right = max(right, intervals[i][1]);
+            }
+            else {
+                vector<int> temp;
+                temp.push_back(left);
+                temp.push_back(right);
+                ending.push_back(temp);
+                left = intervals[i][0];
+                right = intervals[i][1];
+            }
+        }
+        // 最后一步更新left和right，还要进行一次写入
+        vector<int> temp;
+        temp.push_back(left);
+        temp.push_back(right);
+        ending.push_back(temp);
+        return ending;
+    }
+};
