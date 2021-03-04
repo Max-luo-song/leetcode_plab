@@ -1,0 +1,40 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ /*
+  *     算法思想：本题通过放置的最小，判断出属于贪心问题。三层结构中，摄像头放在中间最好。从底向上分析，叶子节点的父节点放一层，
+  *               自此每隔两层放一层摄像头。一种想法是不断删除一层层节点，但树结构删除节点比较麻烦。
+  *               用状态表示，0代表没覆盖，1代表有摄像头，2代表覆盖了。
+  *               从下往上分析使用后序遍历
+ */
+class Solution {
+public:
+    int result = 0;
+    int traverse(TreeNode *cur) {
+        if (cur == NULL) // 空节点算覆盖了
+            return 2;
+        int left = traverse(cur->left);
+        int right = traverse(cur->right);
+
+        if (left ==2 && right == 2) // 左右都覆盖，当前节点没有覆盖
+            return 0;
+        if (left == 0 || right == 0) { // 左右节点有一个没有覆盖，此时父节点需要摄像头
+            result++;
+            return 1;
+        }
+        if (left == 1 || right == 1) // 左右节点有一个摄像头，父节点就被覆盖
+            return 2;
+        return -1; 
+    }
+    int minCameraCover(TreeNode* root) {
+        if (traverse(root) == 0) // 对于根节点做了特殊处理，如果没覆盖再加一个
+            result++;
+        return result;
+    }
+};
