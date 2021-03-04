@@ -1,0 +1,24 @@
+/*
+ *  算法思想：本题思路巧妙，划分字符串的方法是先统计每一个字符出现的最远距离，设置右边界实时更新。从头到尾遍历，如果索引与有边界
+ *            右边界重合说明找到了分界点。
+*/
+class Solution {
+public:
+    vector<int> partitionLabels(string S) {
+        vector<int> ending;
+        int num[26] = {0};
+        for (int i=0; i<S.length(); i++) { // 统计字符最后出现的位置
+            num[S[i]-'a'] = i;
+        }
+        int left = 0;
+        int right = 0;
+        for (int i=0; i<S.length(); i++) {
+            right = max(right, num[S[i]-'a']);
+            if (i == right) {
+                ending.push_back(right-left+1);
+                left = i+1;
+            }
+        }
+        return ending;
+    }
+};
