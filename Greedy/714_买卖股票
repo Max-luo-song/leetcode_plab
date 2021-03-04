@@ -1,0 +1,25 @@
+/*
+ *  算法思想：本题与之前的买卖股票不同，之前可以通过计算相邻的正收入得到。本题要判断收入是否足够手续费
+ *            考虑买入时间，卖出时间。买入时寻找最低价，用minPrice存储，prices[i]代表卖出的价格。
+ *            分了三种情况：1.找到当前更低价，买入值更新 2.卖出值小于买入值加手续费，不卖出。result不更改
+ *            3.卖出值大于买入值加手续费，但不一定卖出。通过result增加当前卖出的收获。
+*/
+class Solution {
+public:
+    int maxProfit(vector<int>& prices, int fee) {
+        int result = 0;
+        int minPrice = prices[0];
+        for (int i=1; i<prices.size(); i++) {
+            if (prices[i] < minPrice) // 买入
+                minPrice = prices[i];
+            if (prices[i]>=minPrice && prices[i]<=minPrice+fee) { // 不买不卖
+                continue;
+            }
+            if (prices[i]> minPrice+fee) { // 有收益，增加
+                result += prices[i] - minPrice-fee; // 假装卖出
+                minPrice = prices[i] - fee; // 上面是假装卖，减了一次fee，买入价格减一个fee
+            }
+        }
+        return result;
+    }
+};
