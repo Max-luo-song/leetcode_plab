@@ -1,0 +1,23 @@
+/*
+ *  算法思想：本题可以抽象成0-1背包问题。寻找尽可能平均的装法。
+ *            背包容量是总和的一半，物品重量和体积都是stones
+*/
+class Solution {
+public:
+    int lastStoneWeightII(vector<int>& stones) {
+        //vector<int> dp(30001, 0); 
+        vector<int> dp(15001, 0); //从题中看出总和为30000，一半的话15000也够
+        int sum = 0;
+        for (int i=0; i<stones.size(); i++) {
+            sum += stones[i];
+        }
+        int target = sum/2;
+        // dp[target]代表target最多可以消解多少
+        for (int i=0; i<stones.size(); i++) {
+            for (int j=target; j>=stones[i]; j--) {
+                dp[j] = max(dp[j], dp[j-stones[i]]+stones[i]);
+            }
+        }
+        return sum-dp[target]-dp[target]; // sum减最多的两倍的是最小剩余
+    }
+};
