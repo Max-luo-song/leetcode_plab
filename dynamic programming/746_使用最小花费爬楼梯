@@ -1,0 +1,19 @@
+/*
+ *  算法思想：本题是爬楼梯问题，属于动态规划问题。确定状态转移方程时发现当前阶梯与此前两个阶梯有关系。
+ *            定义dp数组下标为到达第i个的最小花费。状态转移方程为：array[i] = min(array[i-2], array[i-1]) + cost[i];
+*/
+class Solution {
+public:
+    int minCostClimbingStairs(vector<int>& cost) {
+        if (cost.size() == 2)
+            return min(cost[0], cost[1]);
+        vector<int> array(cost.size());
+        array[0] = cost[0];
+        array[1] = cost[1];
+        for (int i=2; i<cost.size(); i++) {
+            array[i] = min(array[i-2], array[i-1]) + cost[i];
+            // array[i] = min(array[i-2]+cost[i-2], array[i-1]+cost[i-1]) 不选择这个是因为题意理解问题。第i个台阶的cost[i]定义是上到这个台阶的花费
+        }
+        return min(array[cost.size()-1], array[cost.size()-2]); // 最后一个台阶认为是0，所以后两个都有可能，取最小值
+    }
+};
