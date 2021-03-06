@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-void dp_function() {
+/*void dp_function() {
 	vector<int> weight = {1,3,4};
 	vector<int> value = {15,20,30};
 	int bagWeight = 4;
@@ -33,7 +33,21 @@ void dp_function() {
 	}
 	cout << dp[dp.size()-1][dp[0].size()-1] << endl;
 	
-}
+}*/
+// 一维滚动表示，背包问题使用相邻两层。可进行空间优化 
+void dp_function() {
+	vector<int> weight = {1,3,4};
+	vector<int> value = {15,20,30};
+	int bagWeight = 4;
+	vector<int> dp(bagWeight+1, 0);
+	
+	for (int i=0; i<=weight.size(); i++) { // 遍历物品 
+		for (int j=bagWeight; j>=weight[i]; j--) { // 遍历体积，必须从后往前。只需更新比物品体积大(>=)的位置即可 
+			dp[j] = max(dp[j], dp[j-weight[i]]+value[i]);
+		}
+	}
+	cout << dp[bagWeight] << endl;
+} 
 int main(void) {
 	dp_function();
 	return 0;
