@@ -1,0 +1,29 @@
+/*
+ *  算法思想：本题抽象成01背包问题。需要确定背包容量，价值，物品重量
+ *            背包容量本题具有两个维度，m和n。物品重量就是每个子串的m,n个数
+ *            价值就是子集个数。dp[i][j]定义为具有i个m,和j个n时子集的个数
+*/
+class Solution {
+public:
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        // 两个维度一句初始化的时候，不用中间变量。这样是错误的：vector<vector<int>> dp(m+1, vector<int> temp (n+1, 0));
+        vector<vector<int>> dp(m+1, vector<int> (n+1, 0));
+        for (auto str:strs) { // 遍历物品
+            int zeronum = 0;
+            int onenum = 0;
+            for (auto p:str) {
+                if (p == '1')
+                    onenum++;
+                else
+                    zeronum++;
+            }
+            // 两个维度的背包容量，注意倒叙
+            for (int i=m; i>=zeronum; i--) {
+                for (int j=n; j>= onenum; j--) {
+                    dp[i][j] = max(dp[i][j], dp[i-zeronum][j-onenum]+1);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+};
