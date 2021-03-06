@@ -1,0 +1,59 @@
+/*
+ *  算法思想：使用动态规划算法，将问题整合成0-1背包问题。总和的一半等于背包体积，装入背包能否数值能否恰好等于背包体积。
+ *            重量使用nums表示，价值也是用nums表示。于是完全转移到了0-1问题，按照模板写就行
+*/
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int sum = 0;
+        vector<int> dp(20001, 0); // dp[i]的含义是容量为i的背包最多防止数组值
+        for (int i=0; i<nums.size(); i++) {
+            sum += nums[i];
+        }
+        if (sum % 2 == 1)
+            return false;
+        int target = sum/2;
+        for (int i=0; i<nums.size(); i++) {
+            for (int j=target; j>=nums[i]; j--) {
+                dp[j] = max(dp[j], dp[j-nums[i]]+nums[i]);
+            }
+        }
+        if (dp[target] == target)
+            return true;
+        else
+            return false;
+    }
+};
+/*
+ *  算法思想：使用回溯法，寻找数组中是否有和为总和一半的情况，会超时，但是一种方法
+*/
+/*class Solution {
+public:
+    int sum = 0;
+    bool tag = false;
+    void back(vector<int>& nums, int startIndex, int target) {
+        if (sum == target) {
+            tag = true;
+            return ;
+        }
+        if (sum > target || tag == true)
+            return ;
+        for (int i=startIndex; i<nums.size(); i++) {
+            sum += nums[i];
+            back(nums, i+1, target);
+            sum -= nums[i];
+        }
+
+    }
+    bool canPartition(vector<int>& nums) {
+        int target = 0;
+        for (int i=0; i<nums.size(); i++) {
+            target += nums[i];
+        }
+        if (target % 2 == 1)
+            return false;
+        target = target/2;
+        back(nums, 0, target);
+        return tag;
+    }
+};*/
