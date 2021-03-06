@@ -1,0 +1,19 @@
+/*
+ *  算法思想：多重背包相比于01背包区别在于可以多次选择同一物品，区别在于重量遍历的时候从左到右，进行复用
+*/
+void dp_function() {
+	vector<int> weight = {1,3,4};
+	vector<int> value = {15,20,30};
+	int bagWeight = 4;
+	vector<int> dp(bagWeight+1, 0);
+	for (int i=0; i<weight.size(); i++) { // 物品遍历
+		for (int j=weight[i]; j<=bagWeight; j++) { // 重量遍历
+			dp[j] = max(dp[j], dp[j-weight[i]]+value[i]);
+		}
+	}
+	cout << dp[bagWeight] << endl;
+} 
+int main(void) {
+	dp_function();
+	return 0;
+}
