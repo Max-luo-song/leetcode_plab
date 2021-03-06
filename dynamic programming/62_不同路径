@@ -1,0 +1,23 @@
+/*
+ *  算法思想：本题属于经典的动态规划问题，考虑边界条件（第一排第一列为1）.
+ *            状态转移方程为：dp[i][j] = dp[i][j-1] + dp[i-1][j];
+*/
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        vector<int> temp(n, 0);
+        vector<vector<int>> dp(m, temp); // 定义数组时需要时二维数组，注意方式
+        for (int i=0; i<n; i++) {
+            dp[0][i] = 1;
+        }
+        for (int i=0; i<m; i++) {
+            dp[i][0] = 1;
+        }
+        for (int i=1; i<m; i++) {
+            for (int j=1; j<n; j++) {
+                dp[i][j] = dp[i][j-1] + dp[i-1][j];
+            }
+        }
+        return dp[m-1][n-1];
+    }
+};
