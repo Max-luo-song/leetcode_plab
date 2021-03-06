@@ -1,0 +1,19 @@
+/*
+ *  算法思想：本题是拆数问题，要选择拆成两个或者是拆成多个。利用动态规划完成
+*/
+class Solution {
+public:
+    int integerBreak(int n) {
+        vector<int> dp(n+1, 0);
+        if (n == 2)
+            return 1;
+        dp[2] = 2; // 可能性从3开始讨论
+        for (int i=3; i<=n; i++) {
+            // for (int j=1; j<=i; j++) 两种方式都可以，但第二个更快，要保证i-j>1，可得j<i-1 
+            for (int j=1; j<i-1; j++) {
+                dp[i] = max(dp[i], max(j*(i-j), j*dp[i-j])); // 最大值选择，包括很多组，对应外面的max。每一组中，拆成两个还是多个再选一下
+            }
+        }
+        return dp[n];
+    }
+};
