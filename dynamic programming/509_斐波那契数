@@ -1,0 +1,32 @@
+/*
+ *  算法思想：普通递归写法
+*/
+/*class Solution {
+public:
+    int res(int n) {
+        if (n == 0 || n == 1)
+            return n;
+        else
+            return res(n-1)+res(n-2);
+    }
+    int fib(int n) {
+        return res(n);
+    }
+};*/
+/*
+ *  算法思想：动态规划，O（n）空间复杂度可变为o(2)
+*/
+class Solution {
+public:
+    int fib(int n) {
+        if (n == 0 || n == 1)
+            return n;
+        vector<int> a(n+1);
+        a[0] = 0;
+        a[1] = 1;
+        for (int i=2; i<=n; i++) { // 因为斐波那契数列从0开始，到n结束。所以此处要小于等于n
+            a[i] = a[i-1]+a[i-2];
+        }
+        return a[n];
+    }
+};
