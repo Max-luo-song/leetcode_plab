@@ -1,0 +1,31 @@
+/*
+ *  算法思想：本题一看与动态规划没啥关系，第一时间能想到的是5的数量是1，4和2，3之和。（确实使用此方法）
+ *            背包问题，需要找到背包容量。使用数学推导过程：
+ *            1.left总-right总 = S
+ *            2.left总+right总等于sum
+ *            3.left总 = (S+sum)/2; S和sum已知，寻找总和为left总。即背包容量
+ *            dp[i]代表和为i的组合总数
+*/
+class Solution {
+public:
+    int findTargetSumWays(vector<int>& nums, int S) {
+        int sum = 0;
+        for (int i=0; i<nums.size(); i++) {
+            sum += nums[i];
+        }
+        if (S > sum) // 一个使用一次，无法达到
+            return 0;
+        if ((S + sum) % 2 == 1)  // 有余数的情况下无法找到left总
+            return 0; // 此时没有方案
+        int target = (sum+S)/2;
+        vector<int> dp(target+1,0);
+        dp[0] = 1; // 数组和为0时有一种方法
+        // 求背包可能性的组合问题，递推式使用这个：dp[j] += dp[j-nums[i]];代表各种可能的总和相加
+        for (int i=0; i<nums.size(); i++) {
+            for (int j=target; j>=nums[i]; j--) {
+                dp[j] += dp[j-nums[i]];
+            }
+        }
+        return dp[target];
+    }
+};
