@@ -1,0 +1,23 @@
+/*
+ *  算法思想：本题回溯做法类似于切割回文串，判断条件改变为每一子串是否存在于wordDict中
+ *           从特点可以分析出多重背包问题，以s作为背包容量，wordDict作为物品重量
+ *           dp[i]代表长度为i的字符串是否满足条件，初始化dp[0]为true。无实际意义
+ *           状态转移方程思路为如果当前到i,子串到j，i-j这一段在wordDict中，并且dp[j]为true
+ *           dp[i]为true
+*/
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> word(wordDict.begin(), wordDict.end());
+        vector<bool> dp(s.size()+1, false);
+        dp[0] = true;
+        for (int i=1; i<=s.size(); i++) {
+            for (int j=0; j<i; j++) {
+                string temp = s.substr(j, i-j); //substr(起始位置，截取的个数)
+                if (word.find(temp) != word.end() && dp[j] == true)
+                    dp[i] = true; 
+            }
+        }
+        return dp[s.size()];
+    }
+};
