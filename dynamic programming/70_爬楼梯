@@ -17,3 +17,27 @@ public:
         return array[n-1];
     }
 };
+
+/*
+ *  算法思想：本题直接的方法是num[i] = num[i-1]+num[i-2]的状态转移方程
+ *            同样可以使用多重背包解决，问题转换为背包容量为总阶数，物品重量为每次上升的数量值
+*/
+class Solution {
+public:
+    int climbStairs(int n) {
+        vector<int> dp(n+1, 0);
+        // nums的目的是构造出物品选择，即每次爬的个数。直接使用int数即可
+        // vector<int> nums;
+        // nums.push_back(1);
+        // nums.push_back(2);
+        int m = 2; // 一次爬m个台阶
+        dp[0] = 1; // 初始化一般从0开始
+        for (int i=1; i<=n; i++) { // 对于i的取值，可以从0开始。但i已经初始化过了，不需要了
+            for (int j=1; j<=m; j++) {
+                if (i-j >= 0)
+                    dp[i] += dp[i-j]; //本题相当于j代替了num[j]
+            }
+        }
+        return dp[n];
+    }
+};
