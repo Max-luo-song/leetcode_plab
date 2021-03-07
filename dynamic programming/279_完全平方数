@@ -1,0 +1,18 @@
+/*
+ *  算法思想：本题属于完全背包问题，n为背包容量，完全平方数为物品重量
+ *           输入求最小个数，理解为组合问题
+*/
+class Solution {
+public:
+    int numSquares(int n) {
+        vector<int> dp(n+1, INT_MAX); // 求最小，初始化为最大
+        dp[0] = 0; // 从0开始初始化
+        for (int i=1; i*i<=n; i++) { // nums[i]用i*i代替
+            for (int j=i*i; j<=n; j++) {
+                if (dp[j-i*i] != INT_MAX)
+                    dp[j] = min(dp[j], dp[j-i*i]+1);
+            }
+        }
+        return dp[n];
+    }
+};
