@@ -1,0 +1,23 @@
+/*
+ *  算法思想：本题在coins中任意个数，达到amount值。不限此处，归类为多重背包问题。
+ *           dp[i]代表i为总金额时硬币的最小数量
+ *           递推公式dp[i-num[j]]+1是dp[i]的，要选最小的，就变成了dp[j] = min(dp[j], dp[j-coins[i]]+1);
+ *           初始化问题，选最小的所有都初始化成最大值
+*/
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        vector<int> dp(amount+1, INT_MAX); // 因为是求较小值，初始化为最大值
+        dp[0] = 0;
+        for (int i=0; i<coins.size(); i++) {
+            for (int j=coins[i]; j<=amount; j++) { // 完全背包问题，背包容量是从左到右
+                if (dp[j-coins[i]] != INT_MAX) // 防止溢出
+                    dp[j] = min(dp[j], dp[j-coins[i]]+1);
+            }
+        }
+        if (dp[amount] == INT_MAX) // 没有改变，说明没有找到
+            return -1;
+        else
+            return dp[amount];
+    }
+};
