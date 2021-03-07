@@ -1,0 +1,21 @@
+/*
+ *  算法思想：本题使用动态规划求解排列问题。排列问题求个数可以使用动态规划，要想完全输出需要使用回溯
+ *            相较于组合，排列需要调换物品和背包容量的顺序。
+*/
+class Solution {
+public:
+    int combinationSum4(vector<int>& nums, int target) {
+        vector<int> dp(target+1, 0);
+        dp[0] = 1;
+        for (int i=0; i<=target; i++) { // 背包容量从0开始
+            for (int j=0; j<nums.size(); j++) {
+                if (i-nums[j] >=0 && dp[i] < INT_MAX-dp[i-nums[j]]) { // 做一下限定，索引大于等于0
+                // 测试数据中有两个数较大，和超过了32位的表示范围。判断一次
+                // 但不能写成dp[i]+dp[i-num[j]]<INT_MAX,先做加法就超了
+                    dp[i] += dp[i-nums[j]]; // 仍然满足个数要求的状态转移方程
+                }
+            }
+        }
+        return dp[target];
+    }
+};
