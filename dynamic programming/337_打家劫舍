@@ -1,0 +1,32 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ /*
+  * 算法思想：本题属于树形动态规划问题，保持二叉树常用递归的习惯。进行分解。当分解成只有三个节点时
+  *           情况如下：1.取根节点，不取左右 2.不取根节点，取左右和
+  *           遍历方式选择后序遍历，到根节点处为止。用vector<int> dp两个元素，第一个是不取该节点的最大值，第二个是取该节点的最大值
+ */
+class Solution {
+public:
+    vector<int> robtree(TreeNode* root) {
+        if (root == NULL)
+            return vector<int>{0,0};
+        // 遍历方式：后序遍历
+        vector<int> left = robtree(root->left);
+        vector<int> right = robtree(root->right);
+        // left[0]代表不偷左节点的最大值，left[1]代表偷左节点的最大值
+        int var1 = root->val+left[0]+right[0]; // 偷根节点
+        int var2 = max(left[0],left[1])+max(right[0],right[1]); // 不偷根节点
+        return vector<int> {var2,var1};
+    }
+    int rob(TreeNode* root) {
+        vector<int> result = robtree(root);
+        return max(result[0], result[1]);
+    }
+};
