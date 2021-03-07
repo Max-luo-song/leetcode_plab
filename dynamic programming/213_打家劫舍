@@ -1,0 +1,29 @@
+
+/*
+ *  算法思想：本题是环形的打家劫舍，难点在于首尾的选择。将环进行拆分。拆成两部分：
+ *            1.第一个到倒数第二个 2.第二个到倒数第一个。从二者之间选择更大的。
+ *            子问题就是单向问题，按照之前的方式解决即可：状态转移方程为：dp[i] = max(dp[i-1], dp[i-2]+nums[i]);
+*/
+class Solution {
+public:
+    int rob_function(vector<int>& nums, int start, int end) {
+        if (end == start)
+            return nums[end];
+        vector<int> dp(nums.size(), 0); // 实现方式上，可以令dp大小与nums相同，但只关注从start处开始的
+        dp[start] = nums[start];
+        dp[start+1] = max(nums[start], nums[start+1]); // 第二个一定要两者选择大的
+        for (int i=start+2; i<=end; i++) {
+            dp[i] = max(dp[i-1], dp[i-2]+nums[i]);
+        }
+        return dp[end];
+    }
+    int rob(vector<int>& nums) {
+        if (nums.size() == 1)
+            return nums[0];
+        else if (nums.size() == 2)
+            return max(nums[0],nums[1]);
+        int head = rob_function(nums, 0, nums.size()-2); // 情况1
+        int tail = rob_function(nums, 1, nums.size()-1); // 情况2
+        return max(head, tail);
+    }
+};
